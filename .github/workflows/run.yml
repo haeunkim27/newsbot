@@ -2,7 +2,7 @@ name: run
 
 on:
   schedule:
-    - cron: '50 22 * * *'  # 매일 오전 7시 50분 (한국시간)
+    - cron: '*/5 * * * *'   # 5분마다
   workflow_dispatch:
 
 jobs:
