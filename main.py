@@ -241,7 +241,7 @@ try:
     print("\n===== 최종 미디어브리핑 =====\n")
     print(final_result)
 
-  SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
+    SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
 
     requests.post(
         SLACK_WEBHOOK_URL,
