@@ -12,7 +12,14 @@ client = OpenAI(
     http_client=httpx.Client(verify=False)
 )
 
-driver = webdriver.Chrome()
+from selenium.webdriver.chrome.options import Options
+
+options = Options()
+options.add_argument("--headless")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+
+driver = webdriver.Chrome(options=options)
 
 KEYWORDS = {
     "자사 및 경쟁사 동향": [
