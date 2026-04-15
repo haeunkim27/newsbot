@@ -7,8 +7,10 @@ import httpx
 
 print("시작됨")
 
+import os
+
 client = OpenAI(
-    api_key="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",
+    api_key=os.getenv("OPENAI_API_KEY"),
     http_client=httpx.Client(verify=False)
 )
 
@@ -260,5 +262,3 @@ try:
 
 except Exception as e:
     print(f"최종 GPT 호출 에러: {e}")
-
-input("\n엔터를 누르면 종료됩니다...")
