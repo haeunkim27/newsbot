@@ -2,7 +2,7 @@ name: run
 
 on:
   schedule:
-    - cron: '*/5 * * * *'   # 5분마다
+    - cron: '*/5 * * * *'   # test
   workflow_dispatch:
 
 jobs:
