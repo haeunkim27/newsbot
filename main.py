@@ -104,7 +104,9 @@ finally:
 print("\n===== 크롤링 완료 =====\n")
 print("총 기사 개수:", len(all_news))
 
-today = datetime.now().strftime("%y%m%d")
+from datetime import datetime, timedelta
+
+today = (datetime.utcnow() + timedelta(hours=9)).strftime("%y%m%d")
 
 if not all_news:
     print("수집된 기사가 없습니다.")
