@@ -28,7 +28,7 @@ KEYWORDS = {
         "티맵", "티맵모빌리티", "TMAP", "우버",
         "카카오모빌리티", "카카오T", "쏘카",
         "네이버 지도", "카카오맵", "구글맵", "구글지도",
-        "네이버 내비", "카카오 내비", "현대오토에버", "지도 데이터", "지도 경쟁", "위치정보"
+        "네이버 내비", "카카오 내비", "현대오토에버"
     ],
     "모빌리티 동향": [
         "현대차", "테슬라", "수입차",
@@ -62,11 +62,11 @@ try:
             url = f"https://search.naver.com/search.naver?where=news&query={keyword}&sort=1&nso=so:r,p:1d,a:all"
             driver.get(url)
 
-            time.sleep(3)
+            time.sleep(1.5)
 
             for _ in range(2):
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(1)
+                time.sleep(0.7)
 
             links = driver.find_elements(By.TAG_NAME, "a")
 
@@ -111,7 +111,7 @@ partial_results = []
 
 print("\n===== GPT 1차 선별 시작 =====\n")
 
-chunks = list(chunk_list(all_news, 40))
+chunks = list(chunk_list(all_news, 60))
 print("분할 개수:", len(chunks))
 
 for idx, chunk in enumerate(chunks, start=1):
