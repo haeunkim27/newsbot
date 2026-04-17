@@ -62,11 +62,11 @@ try:
             url = f"https://search.naver.com/search.naver?where=news&query={keyword}&sort=1&nso=so:r,p:1d,a:all"
             driver.get(url)
 
-            time.sleep(1.5)
+            time.sleep(3)
 
             for _ in range(2):
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(0.7)
+                time.sleep(1)
 
             links = driver.find_elements(By.TAG_NAME, "a")
 
