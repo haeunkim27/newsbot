@@ -91,9 +91,6 @@ try:
                     if "일 전" in time_text:
                         continue
 
-                    if not ("시간 전" in time_text or "분 전" in time_text):
-                        continue
-
                     if not href:
                         continue
 
@@ -197,7 +194,6 @@ print("1차 결과 묶음 수:", len(partial_results))
 
 if not partial_results:
     print("GPT 1차 선별 결과가 없습니다.")
-    input("\n엔터를 누르면 종료됩니다...")
     raise SystemExit
 
 final_input = "\n".join(partial_results)
