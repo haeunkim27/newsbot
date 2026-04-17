@@ -75,27 +75,17 @@ try:
                     text = link.text.strip()
                     href = link.get_attribute("href")
 
-                    if not text or not href:
+                    if not text or not href or "news" not in href:
                         continue
 
-                    if "news" not in href:
-                        continue
+                    parent_box = link.find_element(By.XPATH, "./ancestor::li")
+                    box_text = parent_box.text
 
-                    if any(x in href for x in [
-                        "blog", "cafe", "help", "search",
-                        "channelPromotion", "sports", "entertain",
-                        "inflow", "ader"
-                    ]):
-                        continue
-
-                    if len(text) < 15 or len(text) > 60:
-                        continue
-
-                    if href in seen_links:
-                        continue
-
-                    seen_links.add(href)
-                    all_news.append((text, href, category))
+                    # 시간 필터 (당일만)
+                    if "일 전" not in box_text and "전" in box_text:
+                        if href not in seen_links:
+                            seen_links.add(href)
+                            all_news.append((text, href, category))
 
                 except Exception:
                     continue
@@ -139,7 +129,7 @@ for idx, chunk in enumerate(chunks, start=1):
 
 선별 원칙:
 1. 완전히 동일한 기사, 동일 링크, 재송고성 유사 기사만 제거하라.
-2. 같은 이슈라도 매체 관점이나 내용 포인트가 다르면 별도 기사로 인정할 수 있다. (자사는 특히 그렇고 다른 기사는 웬만하면 중복 처리해서 지워라)
+2. 같은 이슈라도 매체 관점이나 내용 포인트가 다르면 별도 기사로 인정할 수 있다. (그러나 대부분 헤드라인 많이 겹치면 지워라)
 3. 아래 기사는 우선 제외:
    - 순수 정치
    - 일반 사건사고
