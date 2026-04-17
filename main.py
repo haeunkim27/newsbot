@@ -78,6 +78,9 @@ try:
                     if not text or not href or "news" not in href:
                         continue
 
+                    if "search.naver.com" in href:
+                        continue
+                    
                     parent_box = link.find_element(By.XPATH, "./ancestor::li")
                     box_text = parent_box.text
 
