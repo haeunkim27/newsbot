@@ -68,51 +68,53 @@ try:
 
 articles = driver.find_elements(By.CSS_SELECTOR, "div.news_area")
 
-for article in articles:
-    try:
-        title_elem = article.find_element(By.CSS_SELECTOR, "a.news_tit")
-        title = title_elem.text.strip()
-        href = title_elem.get_attribute("href")
+        articles = driver.find_elements(By.CSS_SELECTOR, "div.news_area")
 
-        info_elems = article.find_elements(By.CSS_SELECTOR, "span.info")
+        for article in articles:
+            try:
+                title_elem = article.find_element(By.CSS_SELECTOR, "a.news_tit")
+                title = title_elem.text.strip()
+                href = title_elem.get_attribute("href")
 
-        time_text = ""
-        for info in info_elems:
-            if "전" in info.text:
-                time_text = info.text.strip()
-                break
+                info_elems = article.find_elements(By.CSS_SELECTOR, "span.info")
 
-        # 시간 필터
-        if not time_text:
-            continue
+                time_text = ""
+                for info in info_elems:
+                    if "전" in info.text:
+                        time_text = info.text.strip()
+                        break
 
-        if "일 전" in time_text:
-            continue
+                # 시간 필터
+                if not time_text:
+                    continue
 
-        if not ("시간 전" in time_text or "분 전" in time_text):
-            continue
+                if "일 전" in time_text:
+                    continue
 
-        if not href:
-            continue
+                if not ("시간 전" in time_text or "분 전" in time_text):
+                    continue
 
-        if any(x in href for x in [
-            "blog", "cafe", "help", "search",
-            "channelPromotion", "sports", "entertain",
-            "inflow", "ader"
-        ]):
-            continue
+                if not href:
+                    continue
 
-        if len(title) < 15 or len(title) > 60:
-            continue
+                if any(x in href for x in [
+                    "blog", "cafe", "help", "search",
+                    "channelPromotion", "sports", "entertain",
+                    "inflow", "ader"
+                ]):
+                    continue
 
-        if href in seen_links:
-            continue
+                if len(title) < 15 or len(title) > 60:
+                    continue
 
-        seen_links.add(href)
-        all_news.append((title, href, category))
+                if href in seen_links:
+                    continue
 
-    except Exception:
-        continue
+                seen_links.add(href)
+                all_news.append((title, href, category))
+
+            except Exception:
+                continue
 
 finally:
     driver.quit()
