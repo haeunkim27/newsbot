@@ -68,30 +68,17 @@ try:
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 time.sleep(1)
 
-            articles = driver.find_elements(By.CSS_SELECTOR, "div.news_area")
+                        links = driver.find_elements(By.TAG_NAME, "a")
 
-            for article in articles:
+            for link in links:
                 try:
-                    title_elem = article.find_element(By.CSS_SELECTOR, "a.news_tit")
-                    title = title_elem.text.strip()
-                    href = title_elem.get_attribute("href")
+                    text = link.text.strip()
+                    href = link.get_attribute("href")
 
-                    info_elems = article.find_elements(By.CSS_SELECTOR, "span.info")
-
-                    time_text = ""
-                    for info in info_elems:
-                        if "전" in info.text:
-                            time_text = info.text.strip()
-                            break
-
-                    # 시간 필터
-                    if not time_text:
+                    if not text or not href:
                         continue
 
-                    if "일 전" in time_text:
-                        continue
-
-                    if not href:
+                    if "news" not in href:
                         continue
 
                     if any(x in href for x in [
@@ -101,14 +88,14 @@ try:
                     ]):
                         continue
 
-                    if len(title) < 15 or len(title) > 60:
+                    if len(text) < 15 or len(text) > 60:
                         continue
 
                     if href in seen_links:
                         continue
 
                     seen_links.add(href)
-                    all_news.append((title, href, category))
+                    all_news.append((text, href, category))
 
                 except Exception:
                     continue
@@ -159,7 +146,9 @@ for idx, chunk in enumerate(chunks, start=1):
    - 단순 지역 행사
    - 산업/서비스/경쟁사/규제/기술과 무관한 기사
 4. 애매한 경우에는 포함 여부를 보수적으로 판단하되, 브리핑 가치가 낮으면 제외하라.
-
+5. 반드시 24시간 이내 기사만 포함하라. (eg. 네이버 상에서 00시간 전, 분전 기사만 남기고, 0일전 기사는 안됨)
+   오래된 기사(하루 이상)는 모두 제거하라.
+   
 우선순위:
 - 티맵 / 티맵모빌리티 / TMAP 직접 언급 기사
 - 경쟁사(카카오모빌리티, 우버, 쏘카, 네이버지도 등) 관련 핵심 기사
