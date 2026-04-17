@@ -68,7 +68,7 @@ try:
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 time.sleep(1)
 
-                        links = driver.find_elements(By.TAG_NAME, "a")
+            links = driver.find_elements(By.TAG_NAME, "a")
 
             for link in links:
                 try:
