@@ -126,7 +126,6 @@ today = (datetime.utcnow() + timedelta(hours=9)).strftime("%y%m%d")
 
 if not all_news:
     print("수집된 기사가 없습니다.")
-    input("\n엔터를 누르면 종료됩니다...")
     raise SystemExit
 
 partial_results = []
