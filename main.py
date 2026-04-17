@@ -75,26 +75,42 @@ try:
                     text = link.text.strip()
                     href = link.get_attribute("href")
 
-                    if not text or not href or "news" not in href:
+                    if not text or not href:
                         continue
 
-                    if "search.naver.com" in href:
+                    # 🔥 네이버 뉴스 링크만 허용
+                    if not ("news.naver.com" in href or "n.news.naver.com" in href):
                         continue
-                    
-                    parent_box = link.find_element(By.XPATH, "./ancestor::li")
-                    box_text = parent_box.text
 
-                    # 시간 필터 (당일만)
-                    if "일 전" in box_text:
+                    # 🔥 노이즈 제거
+                    if any(x in href for x in [
+                        "help.naver.com", "search.naver.com",
+                        "blog", "cafe", "sports", "entertain"
+                    ]):
                         continue
-                    
-                    if href not in seen_links:
-                        seen_links.add(href)
-                        all_news.append((text, href, category))
+
+                    # 🔥 제목 길이 필터
+                    if len(text) < 15 or len(text) > 60:
+                        continue
+
+                    # 🔥 시간 필터 (li 박스에서 가져오기)
+                    try:
+                        parent_box = link.find_element(By.XPATH, "./ancestor::li")
+                        box_text = parent_box.text
+
+                        if "일 전" in box_text:
+                            continue
+                    except:
+                        continue
+
+                    if href in seen_links:
+                        continue
+
+                    seen_links.add(href)
+                    all_news.append((text, href, category))
 
                 except Exception:
                     continue
-
 finally:
     driver.quit()
 
