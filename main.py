@@ -85,10 +85,12 @@ try:
                     box_text = parent_box.text
 
                     # 시간 필터 (당일만)
-                    if "일 전" not in box_text and "전" in box_text:
-                        if href not in seen_links:
-                            seen_links.add(href)
-                            all_news.append((text, href, category))
+                    if "일 전" in box_text:
+                        continue
+                    
+                    if href not in seen_links:
+                        seen_links.add(href)
+                        all_news.append((text, href, category))
 
                 except Exception:
                     continue
