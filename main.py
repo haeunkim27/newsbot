@@ -66,37 +66,53 @@ try:
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 time.sleep(1)
 
-            links = driver.find_elements(By.TAG_NAME, "a")
+articles = driver.find_elements(By.CSS_SELECTOR, "div.news_area")
 
-            for link in links:
-                try:
-                    text = link.text.strip()
-                    href = link.get_attribute("href")
+for article in articles:
+    try:
+        title_elem = article.find_element(By.CSS_SELECTOR, "a.news_tit")
+        title = title_elem.text.strip()
+        href = title_elem.get_attribute("href")
 
-                    if not text or not href:
-                        continue
+        info_elems = article.find_elements(By.CSS_SELECTOR, "span.info")
 
-                    if "news" not in href:
-                        continue
+        time_text = ""
+        for info in info_elems:
+            if "전" in info.text:
+                time_text = info.text.strip()
+                break
 
-                    if any(x in href for x in [
-                        "blog", "cafe", "help", "search",
-                        "channelPromotion", "sports", "entertain",
-                        "inflow", "ader"
-                    ]):
-                        continue
+        # 시간 필터
+        if not time_text:
+            continue
 
-                    if len(text) < 15 or len(text) > 60:
-                        continue
+        if "일 전" in time_text:
+            continue
 
-                    if href in seen_links:
-                        continue
+        if not ("시간 전" in time_text or "분 전" in time_text):
+            continue
 
-                    seen_links.add(href)
-                    all_news.append((text, href, category))
+        if not href:
+            continue
 
-                except Exception:
-                    continue
+        if any(x in href for x in [
+            "blog", "cafe", "help", "search",
+            "channelPromotion", "sports", "entertain",
+            "inflow", "ader"
+        ]):
+            continue
+
+        if len(title) < 15 or len(title) > 60:
+            continue
+
+        if href in seen_links:
+            continue
+
+        seen_links.add(href)
+        all_news.append((title, href, category))
+
+    except Exception:
+        continue
 
 finally:
     driver.quit()
@@ -231,6 +247,11 @@ URL
 ■ IT 업계 동향
 기사 제목
 URL
+
+출력 규칙 (강제):
+- 위 형식 외 어떤 텍스트도 출력하지 마라
+- "※", "총", "건", "요약", "설명", 괄호 문장 절대 금지
+- 형식을 벗어나면 오답으로 간주한다
 
 뉴스:
 {final_input}
